@@ -1,5 +1,5 @@
 ---
-apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: wordpress
@@ -7,6 +7,8 @@ metadata:
   labels:
     app: wordpress
 spec:
+  minReadySeconds: 60
+  progressDeadlineSeconds: 600
   selector:
     matchLabels:
       app: wordpress
@@ -38,6 +40,34 @@ spec:
         volumeMounts:
         - name: wordpress-persistent-storage
           mountPath: /var/www/html
+        livenessProbe:
+          failureThreshold: 10
+          httpGet:
+            path: /
+            port: 80
+            scheme: HTTP
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        readinessProbe:
+          failureThreshold: 10
+          httpGet:
+            path: /
+            port: 80
+            scheme: HTTP
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        resources:
+          limits:
+            cpu: "1"
+            memory: 1024Mi
+          requests:
+            cpu: "1"
+            memory: 1024Mi
+      terminationGracePeriodSeconds: 60
       volumes:
       - name: wordpress-persistent-storage
         persistentVolumeClaim:

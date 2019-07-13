@@ -1,0 +1,7 @@
+# Defines the namespace of an app, update the  <APPNAME> fields
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    name: certmanager
+  name: certmanager

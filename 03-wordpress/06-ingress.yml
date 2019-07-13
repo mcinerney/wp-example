@@ -1,0 +1,36 @@
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: "my-website-v4"
+  name: my-website-v4
+  namespace: wordpress
+spec:
+  rules:
+  - host: my-domain.com
+    http:
+      paths:
+      - backend:
+          serviceName: wordpress
+          servicePort: 80
+  tls:
+  - secretName: my-website-tls
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: "my-website-v6"
+  name: my-website-v6
+  namespace: wordpress
+spec:
+  rules:
+  - host: my-domain.com
+    http:
+      paths:
+      - backend:
+          serviceName: wordpress
+          servicePort: 80
+  tls:
+  - secretName: my-website-tls

@@ -1,0 +1,19 @@
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: ClusterIssuer
+metadata:
+  name: le-production
+  namespace: certmanager
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: noreply@my-domain.com
+    privateKeySecretRef:
+      name: le-production
+    dns01:
+      providers:
+        - name: my-gcp-project
+          clouddns:
+            serviceAccountSecretRef:
+              name: gcloud
+              key: key.json
+            project: my-gcp-project

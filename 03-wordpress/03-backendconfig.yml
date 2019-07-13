@@ -1,0 +1,15 @@
+apiVersion: cloud.google.com/v1beta1
+kind: BackendConfig
+metadata:
+  namespace: wordpress
+  name: wordpress
+spec:
+  cdn:
+    cachePolicy:
+      includeHost: false
+      includeProtocol: true
+      includeQueryString: true
+    enabled: true
+  connectionDraining:
+    drainingTimeoutSec: 60
+  timeoutSec: 10
