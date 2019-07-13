@@ -32,10 +32,13 @@ Create a GCP Service Account in the project which contains your DNS ZONE that yo
     gcloud beta iam service-accounts create certmanager --description "Automated LetsEncrypt Certificate Management Provisioner" --display-name "Cert Manager (GKE)" --project $MY_GCP_PROJECT
 Create a key for this service account and then publish this into your cluster
     gcloud iam service-accounts keys create key.json --project ${MY_GCP_PROJECT} --iam-account cert-manager@${MY_GCP_PROJECT}.iam.gserviceaccount.com
+    kubectl create secret generic gcloud -n certmanager --from-file=./key.json
 
 Grant the service account dns administrative access to be able to add/remove dns entries for the purpose of Lets Encrypt domain validation
     gcloud projects add-iam-policy-binding $MY_GCP_PROJECT --member serviceAccount:certmanager${$MY_GCP_PROJECT}.iam.gserviceaccount.com --role roles/dns.admin
 
+
+```
 kubectl apply -f 01-certmanager/07-crd-issuer-staging.yaml
 kubectl apply -f 01-certmanager/08-crd-issuer-production.yaml
 ```
@@ -67,3 +70,6 @@ kubectl apply -f 03-wordpress/04-service.yml
 kubectl apply -f 03-wordpress/05-certificate.yml
 kubectl apply -f 03-wordpress/06-ingress.yml
 ```
+
+An Ingress (Load Balancer) may take up to 10 minutes to start working. The same goes with the TLS Certificate.
+Grab a coffee and come back in 10-20 minutes
